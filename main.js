@@ -67,7 +67,7 @@ function schedule(days, times, members) {
 }
 
 function main() {
-    let noms = ["Céline", "Karine", "FabienneR", "FabienneS", "Nicolas", "Coralie", "Marielle", "Bérangère", "Audrey"];
+    let noms = ["Person1", "Person2", "Person3", "Person4", "Person5", "Person6", "Person7", "Person8", "Person9"];
     let times = [ { start: '9h', end: '16h', duration: 7},
               { start: '12h', end: '20h', duration: 8 },
               { start: '9h', end: '15h', duration: 6},
