@@ -1,7 +1,8 @@
 const fns = require("date-fns");
+const fs = require('fs');
 
 class Technician {
-    /** Create Technician objects
+    /** Creates Technician objects
      * @param name: Technician's name
      * @type name: string
      * @param preference: Technician's preference concerning when he/she doesn't want to work during the week
@@ -14,7 +15,7 @@ class Technician {
         membersT.push(this);
     }
 
-    /** Allow to edit name of a Technician object
+    /** Allows to edit name of a Technician object
      * @param newName: New name that will be updated
      * @type newName: string
      * */
@@ -22,7 +23,7 @@ class Technician {
         this.name = newName;
     }
 
-    /** Allow to increase workingTime of a Technician object
+    /** Allows to increase/decrease (if value is negative) workingTime of a Technician object
      * @param duration: Value of increasing workingTime
      * @type duration: integer
      * @return type: Object of Technician Class
@@ -33,8 +34,8 @@ class Technician {
     }
 
 
-    /** Take an array as input and return the Technician with the least workingTime among all
-     * @param array: array full with Technician objects
+    /** Takes an array as input and returns the Technician with the least workingTime among all
+     * @param array: array full of Technician objects
      * @type array: array
      * @return minimum: Technician with the least value in workingTime
      * @type minimum: Object of Technician class
@@ -48,8 +49,6 @@ class Technician {
         }
         return minimum;
     }
-
-
 }
 
 /**
@@ -57,21 +56,33 @@ class Technician {
  * */
 
 class Days {
+	/** Creates Days objects with a Tech assigned to it following preferences and working time
+	 * @param times: Contains all working times
+     * @type times: array
+     * @param members: Contains all Technicians
+     * @type members: array
+	 * @param date: Date of today
+     * @type date: Date (dd-MM)
+	 * */
     constructor(times, members, date) {
         this.date = fns.format(date, "dd-MM")
         let available = members.slice();
         let array = [];
-        for (let i = 0; i < times.length; i++) {
+		let i = 0;
+		let techPref = True;
+		let Tlength = times.length
+        while (i < Tlength) { 
             do {
                 let tech = Technician.minTime(available);
                 if (tech.preference !== fns.format(date, "EEEE")) {
-                    break;
+                    techPref = False;
                 }
                 else {
                     let index = available.indexOf(tech);
                     available.splice(index, 1);
+					i++;
                 }
-            } while(available.length !== 0)
+            } while(available.length !== 0 && techPref == True)
             if (available.length === 0) {
                 throw new Error("Il est impossible de trouver un arrangement selon les préférences pour cette date : " + this.date);
             }
@@ -83,15 +94,26 @@ class Days {
         }
         this.times = array;
     }
+	/** Allows to print out the Technician associated to a specific Day
+	 * @param times: Contains the Technician associated to that day
+     * @type times: array
+	 * */
     printOut(times) {
-        for (let i = 0; i-1 < times.length; i++) {
-            console.log("Horaire" + i.toString() + "=" + this.times[i])
+		console.assert(times >= 0, "PrintOut a valid number");
+		let length = times.length;
+        for (let i = 0; i-1 < length; i++) {
+            console.log("Horaire" + i.toString() + "=" + this.times[i]);
         }
     }
 }
 
-/**
- *
+/** Creates a schedule based on args given by user
+ * @param days: Contains the worker associated to that day
+ * @type days: integer
+ * @param times: Contains all working times possible
+ * @type times: array
+ * @param members: Contains all Technicians
+ * @type members: array
  * */
 function schedule(days, times, members) {
     const list = [];
@@ -104,6 +126,46 @@ function schedule(days, times, members) {
     }
     return list;
 }
+
+
+class Times {
+	constructor(start, end, duration) {
+		this.start = start;
+		this.end = end;
+		this.duration = duration;
+	}
+	/** Allows to put data in a dictionnary to be transformed in JSON format later
+	 * @param days: Contains all Days you want to transform (basically every single one here)
+	 * @type data: array
+	 * */
+	sortData(data) {
+		let start = [];
+		let end = [];
+		let duration = [];
+		let length = data.length;
+		for (let i = 0; i < length; i++) {
+			start.push(data[i].start);
+			start.push(data[i].start);
+			start.push(data[i].start);
+		}
+		dictionnary = {"start": start, "end": end, "duration": duration}
+		return dictionnary;
+	}
+}
+
+
+
+function jsonWriter(data) {
+	
+}
+
+/* fs.writeFile("data.json", "Hey there!", function(err) {
+    if(err) {
+        return console.log(err);
+    }
+    console.log("The file was saved!");
+}); 
+*/
 
 /**
  *
