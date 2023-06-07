@@ -71,7 +71,7 @@ class Days {
 		let i = 0;
 		let techPref = True;
 		let Tlength = times.length
-        while (i < Tlength && techPref == True) { 
+        while (i < Tlength) { 
             do {
                 let tech = Technician.minTime(available);
                 if (tech.preference !== fns.format(date, "EEEE")) {
@@ -82,7 +82,7 @@ class Days {
                     available.splice(index, 1);
 					i++;
                 }
-            } while(available.length !== 0)
+            } while(available.length !== 0 && techPref == True)
             if (available.length === 0) {
                 throw new Error("Il est impossible de trouver un arrangement selon les préférences pour cette date : " + this.date);
             }
@@ -141,14 +141,14 @@ class Times {
 	sortData(data) {
 		let start = [];
 		let end = [];
-		let duration[];
+		let duration = [];
 		let length = data.length;
 		for (let i = 0; i < length; i++) {
 			start.push(data[i].start);
 			start.push(data[i].start);
 			start.push(data[i].start);
 		}
-		dictionnary = {"start": start; "end": end; "duration": duration}
+		dictionnary = {"start": start, "end": end, "duration": duration}
 		return dictionnary;
 	}
 }
