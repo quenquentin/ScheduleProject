@@ -129,6 +129,14 @@ function schedule(days, times, members) {
 
 
 class Times {
+    /**
+    * @param start: Hour of starting the day
+    * @type start: integer
+    * @param end: Hour of ending the day
+    * @type end: integer
+    * @param duration: Duration of work
+    * @type duration: integer
+    * */
 	constructor(start, end, duration) {
 		this.start = start;
 		this.end = end;
